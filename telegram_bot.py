@@ -81,9 +81,12 @@ def find(update: Update, context: CallbackContext):
             result = f'{matched_words["result_count"]} تا کلمه پیدا شد.\n'
             result += '\n'.join(matched_words["result"])
 
+        first_name = update.message.chat.first_name if update.message.chat.first_name is not None else ''
+        last_name = update.message.chat.last_name if update.message.chat.last_name is not None else ''
+        username = update.message.chat.username
         inlined_input = update.message.text.replace('\n', ' ')
         logger.info(
-            f'{update.message.chat.first_name} {update.message.chat.last_name} - @{update.message.chat.username} sent {inlined_input}')
+            f'{first_name} {last_name} - @{username} sent {inlined_input}')
     except:
         result = 'لطفا پیامت رو تو فرمتی که من میفهمم وارد کن!😖'
 
