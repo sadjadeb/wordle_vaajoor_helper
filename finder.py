@@ -1,15 +1,10 @@
-persian_words = []
-english_words = []
+import json
 
-# read persian words from file
-with open('persian_words.txt', 'r', encoding='utf-8') as f:
-    for line in f:
-        persian_words.append(line.strip())
-
-# read english words from file
-with open('english_words.txt', 'r', encoding='utf-8') as f:
-    for line in f:
-        english_words.append(line.strip())
+# load words from json file
+with open('words_5_letters.json', 'r', encoding='utf-8') as f:
+    words = json.load(f)
+    persian_words = words['vaajoor']
+    english_words = words['wordle']
 
 
 def word_finder(game_mode: str, exact_dict: dict, contains_list: list):

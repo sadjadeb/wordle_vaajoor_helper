@@ -1,9 +1,9 @@
-from webserver import run_server
+from webserver import run_webserver
 from finder import word_finder
 
 
 def run_shell():
-    game_mode = input('Enter game mode: ')
+    game_mode = input('Enter game mode(vaajoor, wordle): ')
     number_of_exact_input = int(input('Enter number of exact input: '))
     print('Enter each index and character in separate lines with space: ')
     exact_dict = {}
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     if run_mode == 1:
         run_shell()
     elif run_mode == 2:
-        run_server()
+        run_webserver()
     else:
         print('Error: run mode not acceptable')
         exit()
