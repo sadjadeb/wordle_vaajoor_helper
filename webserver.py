@@ -2,6 +2,7 @@ from typing import List, Optional, Dict
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from decouple import config
 from finder import word_finder
 
 
@@ -11,9 +12,7 @@ class BodyModel(BaseModel):
     contains: Optional[List] = None
 
 
-app = FastAPI(
-    title="Wordle Vaajoor Helper",
-    version="0.0.1",)
+app = FastAPI(title="Wordle Vaajoor Helper",)
 
 
 @app.get("/")
@@ -29,4 +28,4 @@ async def find(body: BodyModel):
 
 
 def run_webserver():
-    uvicorn.run(app, host='0.0.0.0', port=8080)
+    uvicorn.run(app, host=config('HOST'), port=int(config('PORT')))
