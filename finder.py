@@ -28,9 +28,8 @@ def word_finder(game_mode: str, exact_dict: dict, contains_list: list):
 
     all_acceptable_words = []
     for word in words_dictionary:
-        if len(word) == 5:
-            if eval(condition):
-                all_acceptable_words.append(word)
+        if eval(condition):
+            all_acceptable_words.append(word)
 
     if len(all_acceptable_words) == 0:
         return {'message': 'No words were found', 'result': [], 'result_count': 0}
