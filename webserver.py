@@ -1,8 +1,19 @@
+from typing import List, Optional, Dict
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from pydantic import BaseModel
 from finder import word_finder
 
-app = FastAPI()
+
+class BodyModel(BaseModel):
+    game_mode: str
+    exact: Optional[Dict] = None
+    contains: Optional[List] = None
+
+
+app = FastAPI(
+    title="Wordle Vaajoor Helper",
+    version="0.0.1",)
 
 
 @app.get("/")
@@ -11,25 +22,11 @@ async def root():
 
 
 @app.post("/find")
-async def root(request_body: Request):
-    try:
-        request_body = await request_body.json()
-    except:
-        return {"message": "Invalid json format"}
-
-    try:
-        game_mode = request_body["type"]
-    except:
-        return {"message": "You must specify the type of the request"}
-
-    exact_dict = request_body.get("exact", {})
-    contains_list = request_body.get("contains", [])
-
-    response = word_finder(game_mode, exact_dict, contains_list)
+async def find(body: BodyModel):
+    response = word_finder(body.game_mode, body.exact, body.contains)
 
     return response
 
 
-def run_server():
-    # uvicorn.run(app, host=HOST_ADDRESS, port=HOST_PORT)
-    uvicorn.run(app)
+def run_webserver():
+    uvicorn.run(app, host='0.0.0.0', port=8080)
