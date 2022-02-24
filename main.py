@@ -1,40 +1,11 @@
-from typing import List, Dict
-
-persian_words: List[str] = []
-
-# read words from file
-with open('persian_words.txt', 'r', encoding='utf-8') as f:
-    for line in f:
-        persian_words.append(line.strip())
-
-print(len(persian_words))
+from webserver import run_server
+from finder import word_finder
 
 
-def word_finder(exact_dict: Dict, contain_list: List):
-    if len(contain_list) == 0 and len(exact_dict.keys()) == 0:
-        return {'message': 'No condition', 'result': [], 'result_count': 0}
-
-    condition = ''
-    if len(exact_dict.keys()) > 0:
-        condition = ' and '.join([f'word[{exact_dict[key]}] == "{key}"' for key in exact_dict])
-    if len(contain_list) > 0 and len(exact_dict.keys()) > 0:
-        condition += ' and '
-    if len(contain_list) > 0:
-        condition += ' and '.join([f'"{character}" in word' for character in contain_list])
-
-    all_acceptable_words = []
-    for word in persian_words:
-        if len(word) == 5:
-            if eval(condition):
-                all_acceptable_words.append(word)
-                print(word)
-
-    return {'message': 'Success', 'result': all_acceptable_words, 'result_count': len(all_acceptable_words)}
-
-
-if __name__ == '__main__':
+def run_shell():
+    game_mode = input('Enter game mode: ')
     number_of_exact_input = int(input('Enter number of exact input: '))
-    print('Enter each index and character in seprate lines with space: ')
+    print('Enter each index and character in separate lines with space: ')
     exact_dict = {}
     for i in range(number_of_exact_input):
         input_data = input().split()
@@ -45,9 +16,20 @@ if __name__ == '__main__':
             exit()
 
     number_of_exact_input = int(input('Enter number of contain input: '))
-    print('Enter each character in seprate line: ')
-    contain_list = []
+    print('Enter each character in separate line: ')
+    contains_list = []
     for i in range(number_of_exact_input):
-        contain_list.append(input())
+        contains_list.append(input())
 
-    print(word_finder(exact_dict, contain_list))
+    print(word_finder(game_mode, exact_dict, contains_list))
+
+
+if __name__ == '__main__':
+    run_mode = int(input('Enter run mode: 1 for shell, 2 for webserver: '))
+    if run_mode == 1:
+        run_shell()
+    elif run_mode == 2:
+        run_server()
+    else:
+        print('Error: run mode not acceptable')
+        exit()
