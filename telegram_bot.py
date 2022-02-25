@@ -80,7 +80,6 @@ def find(update: Update, context: CallbackContext):
         elif len(matched_words["result"]) == 1:
             result = f"""فقط یک کلمه پیدا شد که جوابه😁
 ||{matched_words["result"][0]}||"""
-            print(result)
         else:
             result = f'{matched_words["result_count"]} تا کلمه پیدا شد.\n'
             result += '\n'.join(matched_words["result"])
