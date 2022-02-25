@@ -6,13 +6,19 @@ from decouple import config
 from finder import word_finder
 
 
-class BodyModel(BaseModel):
+class RequestModel(BaseModel):
     game_mode: str
     exact: Optional[Dict] = None
-    contains: Optional[List] = None
+    contains: Optional[List[str]] = None
 
 
-app = FastAPI(title="Wordle Vaajoor Helper",)
+class ResponseModel(BaseModel):
+    message: str
+    result: List[str]
+    result_count: int
+
+
+app = FastAPI(title="Wordle Vaajoor Helper")
 
 
 @app.get("/")
@@ -20,9 +26,9 @@ async def root():
     return {"message": "The webserver working properly"}
 
 
-@app.post("/find")
-async def find(body: BodyModel):
-    response = word_finder(body.game_mode, body.exact, body.contains)
+@app.post("/find", response_model=ResponseModel)
+async def find(request: RequestModel):
+    response = word_finder(request.game_mode, request.exact, request.contains)
 
     return response
 
