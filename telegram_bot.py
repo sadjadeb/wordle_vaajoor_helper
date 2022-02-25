@@ -1,4 +1,4 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram.ext import Updater, CallbackContext, MessageHandler, Filters, CommandHandler, CallbackQueryHandler
 from decouple import config
 from finder import word_finder
@@ -77,6 +77,10 @@ def find(update: Update, context: CallbackContext):
             result += '\n'.join(matched_words["result"][:80])
         elif len(matched_words["result"]) == 0:
             result = "متاسفانه هیچ کلمه ای پیدا نشد😢"
+        elif len(matched_words["result"]) == 1:
+            result = f"""فقط یک کلمه پیدا شد که جوابه😁
+||{matched_words["result"][0]}||"""
+            print(result)
         else:
             result = f'{matched_words["result_count"]} تا کلمه پیدا شد.\n'
             result += '\n'.join(matched_words["result"])
@@ -91,7 +95,7 @@ def find(update: Update, context: CallbackContext):
         result = 'لطفا پیامت رو تو فرمتی که من میفهمم وارد کن!😖'
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=result,
-                             reply_to_message_id=update.message.message_id)
+                             reply_to_message_id=update.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def unknown(update: Update, context: CallbackContext):
