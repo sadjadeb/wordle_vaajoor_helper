@@ -63,7 +63,7 @@ def find(update: Update, context: CallbackContext):
         for line in lines:
             line_content = line.split(' ')
             if len(line_content) == 2:
-                exact[line_content[0].lower()] = int(line_content[1][0]) - 1
+                exact[int(line_content[1][0]) - 1] = line_content[0].lower()
             elif len(line_content) == 1:
                 contains.append(line_content[0][0].lower())
             else:

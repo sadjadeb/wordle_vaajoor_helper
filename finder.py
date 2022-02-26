@@ -13,7 +13,7 @@ def word_finder(game_mode: str, exact_dict: dict, contains_list: list):
 
     condition = ''
     if len(exact_dict.keys()) > 0:
-        condition = ' and '.join([f'word[{exact_dict[key]}] == "{key}"' for key in exact_dict])
+        condition = ' and '.join([f'word[{key}] == "{exact_dict[key]}"' for key in exact_dict])
     if len(contains_list) > 0 and len(exact_dict.keys()) > 0:
         condition += ' and '
     if len(contains_list) > 0:
