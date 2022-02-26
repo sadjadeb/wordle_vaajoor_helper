@@ -1,5 +1,5 @@
 from webserver import run_webserver
-from finder import word_finder
+from terminal import run_terminal
 from telegram_bot import run_bot
 import logging
 from multiprocessing import Process
@@ -8,33 +8,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
                     handlers=[logging.FileHandler("log.txt", encoding='utf-8'), logging.StreamHandler()])
 logger = logging.getLogger(__name__)
 
-
-def run_shell():
-    game_mode = input('Enter game mode(vaajoor, wordle): ')
-    number_of_exact_input = int(input('Enter number of exact input: '))
-    print('Enter each index and character in separate lines with space: ')
-    exact_dict = {}
-    for i in range(number_of_exact_input):
-        input_data = input().split()
-        exact_dict[input_data[1]] = int(input_data[0]) - 1
-
-        if exact_dict[input_data[1]] < 0 or exact_dict[input_data[1]] > 4:
-            print('Error: index must be between 1 and 5')
-            exit()
-
-    number_of_exact_input = int(input('Enter number of contain input: '))
-    print('Enter each character in separate line: ')
-    contains_list = []
-    for i in range(number_of_exact_input):
-        contains_list.append(input())
-
-    print(word_finder(game_mode, exact_dict, contains_list))
-
-
 if __name__ == '__main__':
-    run_mode = int(input('Enter run mode: 1 for shell, 2 for webserver, 3 for telegram bot, 4 for all: '))
+    run_mode = int(input('Enter run mode: 1 for terminal, 2 for webserver, 3 for telegram bot, 4 for all: '))
     if run_mode == 1:
-        run_shell()
+        run_terminal()
     elif run_mode == 2:
         run_webserver()
     elif run_mode == 3:
