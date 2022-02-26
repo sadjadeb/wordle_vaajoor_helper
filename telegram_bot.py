@@ -66,6 +66,8 @@ def find(update: Update, context: CallbackContext):
                 exact[line_content[0].lower()] = int(line_content[1][0]) - 1
             elif len(line_content) == 1:
                 contains.append(line_content[0][0].lower())
+            else:
+                raise ValueError
 
         game_mode = context.user_data.get('game_mode', 'vaajoor')
         matched_words = word_finder(game_mode, exact, contains)
@@ -78,10 +80,10 @@ def find(update: Update, context: CallbackContext):
         elif len(matched_words["result"]) == 0:
             result = "متاسفانه هیچ کلمه ای پیدا نشد😢"
         elif len(matched_words["result"]) == 1:
-            result = f"""فقط یک کلمه پیدا شد که جوابه😁
+            result = f"""فقط یک کلمه پیدا شد که احتمالا جوابه😁
 ||{matched_words["result"][0]}||"""
         else:
-            result = f'{matched_words["result_count"]} تا کلمه پیدا شد.\n'
+            result = f'{matched_words["result_count"]} تا کلمه پیدا شد:\n'
             result += '\n'.join(matched_words["result"])
 
         first_name = update.message.chat.first_name if update.message.chat.first_name is not None else ''
@@ -91,7 +93,7 @@ def find(update: Update, context: CallbackContext):
         logger.info(
             f'{first_name} {last_name} - @{username} sent {inlined_input}')
     except:
-        result = 'لطفا پیامت رو تو فرمتی که من میفهمم وارد کن!😖'
+        result = 'لطفا پیامت رو تو فرمتی که من میفهمم وارد کن\!😖'
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=result,
                              reply_to_message_id=update.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
