@@ -123,21 +123,19 @@ def button(update: Update, context: CallbackContext) -> None:
     query.edit_message_text(text=f"حالت بازی: {query.data}")
 
 
-start_handler = CommandHandler('start', start)
-updater.dispatcher.add_handler(start_handler)
-help_handler = CommandHandler('help', help)
-updater.dispatcher.add_handler(help_handler)
-about_handler = CommandHandler('about', about)
-updater.dispatcher.add_handler(about_handler)
-mode_handler = CommandHandler('mode', mode)
-updater.dispatcher.add_handler(mode_handler)
-updater.dispatcher.add_handler(CallbackQueryHandler(button))
-find_handler = MessageHandler(Filters.text & (~Filters.command), find)
-updater.dispatcher.add_handler(find_handler)
-unknown_handler = MessageHandler(Filters.command, unknown)
-updater.dispatcher.add_handler(unknown_handler)
+handler_objects = [
+    CommandHandler('start', start),
+    CommandHandler('help', help),
+    CommandHandler('about', about),
+    CommandHandler('mode', mode),
+    CallbackQueryHandler(button),
+    MessageHandler(Filters.text & (~Filters.command), find),
+    MessageHandler(Filters.command, unknown),
+]
 
 
 def run_bot():
+    for handler in handler_objects:
+        updater.dispatcher.add_handler(handler)
     updater.start_polling()
     updater.idle()
