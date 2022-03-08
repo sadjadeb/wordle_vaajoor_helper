@@ -10,6 +10,7 @@ class RequestModel(BaseModel):
     game_mode: str
     exact: Optional[Dict] = None
     contains: Optional[List[str]] = None
+    not_contains: Optional[List[str]] = None
 
 
 class ResponseModel(BaseModel):
@@ -28,7 +29,7 @@ async def root():
 
 @app.post("/find", response_model=ResponseModel)
 async def find(request: RequestModel):
-    response = word_finder(request.game_mode, request.exact, request.contains)
+    response = word_finder(request.game_mode, request.exact, request.contains, request.not_contains)
 
     return response
 

@@ -7,8 +7,8 @@ with open('words_5_letters.json', 'r', encoding='utf-8') as f:
     english_words = words['wordle']
 
 
-def word_finder(game_mode: str, exact_dict: dict, contains_list: list):
-    if len(contains_list) == 0 and len(exact_dict.keys()) == 0:
+def word_finder(game_mode: str, exact_dict: dict, contains_list: list, not_contains_list: list):
+    if len(contains_list) == 0 and len(exact_dict.keys()) == 0 and len(not_contains_list) == 0:
         return {'message': 'No condition', 'result': [], 'result_count': 0}
 
     condition = ''
@@ -18,6 +18,10 @@ def word_finder(game_mode: str, exact_dict: dict, contains_list: list):
         condition += ' and '
     if len(contains_list) > 0:
         condition += ' and '.join([f'"{character}" in word' for character in contains_list])
+    if len(not_contains_list) > 0 and (len(exact_dict.keys()) > 0 or len(contains_list) > 0):
+        condition += ' and '
+    if len(not_contains_list) > 0:
+        condition += ' and '.join([f'"{character}" not in word' for character in not_contains_list])
 
     if game_mode == 'vaajoor':
         words_dictionary = persian_words

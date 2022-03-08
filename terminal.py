@@ -19,10 +19,16 @@ def run_terminal():
             print('Error: index must be between 1 and 5')
             exit()
 
-    number_of_input = int(input('Enter number of contain input: '))
+    number_of_input = int(input('Enter number of contains input: '))
     print('Enter each character in separate line: ')
     contains_list = []
     for i in range(number_of_input):
         contains_list.append(input())
 
-    print(word_finder(game_mode, exact_dict, contains_list))
+    number_of_input = int(input('Enter number of not contains input: '))
+    print('Enter each character in separate line: ')
+    not_contains_list = []
+    for i in range(number_of_input):
+        not_contains_list.append(input())
+
+    print(word_finder(game_mode, exact_dict, contains_list, not_contains_list))

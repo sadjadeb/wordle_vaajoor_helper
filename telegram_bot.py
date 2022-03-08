@@ -55,36 +55,55 @@ https://github.com/sadjadeb/wordle_vaajoor_helper
     context.bot.send_message(chat_id=update.effective_chat.id, text=about_message)
 
 
+def split_input(lines):
+    exact = {}
+    contains = []
+    not_contains = []
+    for line in lines:
+        line_content = line.split(' ')
+        if len(line_content) == 2:
+            if line_content[1][0] == '-':
+                not_contains.append(line_content[0].lower())
+            else:
+                exact[int(line_content[1][0]) - 1] = line_content[0].lower()
+        elif len(line_content) == 1:
+            contains.append(line_content[0][0].lower())
+        else:
+            raise ValueError
+
+    return exact, contains, not_contains
+
+
+def get_result(matched_words):
+    if len(matched_words["result"]) > 100:
+        result = """تعداد کلمه های پیدا شده با این ورودی خیلی زیاده😶
+    مجبورم فقط ی بخشیش رو بهت نشون بدم😔
+    """
+        result += '\n'.join(matched_words["result"][:80])
+    elif len(matched_words["result"]) == 0:
+        result = "متاسفانه هیچ کلمه ای پیدا نشد😢"
+    elif len(matched_words["result"]) == 1:
+        result = f"""فقط یک کلمه پیدا شد که احتمالا جوابه😁
+    ||{matched_words["result"][0]}||"""
+    else:
+        result = f'{matched_words["result_count"]} تا کلمه پیدا شد:\n'
+        result += '\n'.join(matched_words["result"])
+
+    return result
+
+
 def find(update: Update, context: CallbackContext):
+    if update.message is None:
+        return
+
     try:
         lines = update.message.text.splitlines()
-        exact = {}
-        contains = []
-        for line in lines:
-            line_content = line.split(' ')
-            if len(line_content) == 2:
-                exact[int(line_content[1][0]) - 1] = line_content[0].lower()
-            elif len(line_content) == 1:
-                contains.append(line_content[0][0].lower())
-            else:
-                raise ValueError
+        exact, contains, not_contains = split_input(lines)
 
         game_mode = context.user_data.get('game_mode', 'vaajoor')
-        matched_words = word_finder(game_mode, exact, contains)
+        matched_words = word_finder(game_mode, exact, contains, not_contains)
 
-        if len(matched_words["result"]) > 100:
-            result = """تعداد کلمه های پیدا شده با این ورودی خیلی زیاده😶
-مجبورم فقط ی بخشیش رو بهت نشون بدم😔
-"""
-            result += '\n'.join(matched_words["result"][:80])
-        elif len(matched_words["result"]) == 0:
-            result = "متاسفانه هیچ کلمه ای پیدا نشد😢"
-        elif len(matched_words["result"]) == 1:
-            result = f"""فقط یک کلمه پیدا شد که احتمالا جوابه😁
-||{matched_words["result"][0]}||"""
-        else:
-            result = f'{matched_words["result_count"]} تا کلمه پیدا شد:\n'
-            result += '\n'.join(matched_words["result"])
+        result = get_result(matched_words)
 
         first_name = update.message.chat.first_name if update.message.chat.first_name is not None else ''
         last_name = update.message.chat.last_name if update.message.chat.last_name is not None else ''
