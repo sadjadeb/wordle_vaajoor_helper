@@ -34,10 +34,12 @@ def help(update: Update, context: CallbackContext):
 ❇️برای کار با من کافیه کلماتی که دقیقا جاشون رو میدونی رو به شکل زیر(مثلا میدونی حرف اول نون هست و حرف دوم الف):
 ن 1
 ا 2
-و حروفی که میدونی تو کلمه هستن اما جاشون رو نمیدونی رو به شکل زیر به من بدی:
+و حروفی که میدونی تو کلمه هستن اما جاشون رو نمیدونی رو به شکل زیر:
 د
+و حروفی که تو کلمه نیستن رو به شکل زیر به من بدی:
+حمکف -
 
-⚠️حواست باشه هرکدوم رو تو یک خط جدا وارد کنی.
+⚠️حواست باشه هرکدوم رو تو یک خط جدا وارد کنی و برای حروفی که تو کلمه نیستن حتما خط فاصله رو بعدشون بزنی.
 
 با دستور /mode هم میتونی حالت بازی رو تغییر بدی.
 امیدوارم از بازی لذت ببری🏆😍
@@ -63,7 +65,8 @@ def split_input(lines):
         line_content = line.split(' ')
         if len(line_content) == 2:
             if line_content[1][0] == '-':
-                not_contains.append(line_content[0].lower())
+                for character in line_content[0]:
+                    not_contains.append(character)
             else:
                 exact[int(line_content[1][0]) - 1] = line_content[0].lower()
         elif len(line_content) == 1:
